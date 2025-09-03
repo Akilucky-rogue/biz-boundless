@@ -2,95 +2,137 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Store Management App Design System - Professional Mobile-First Interface */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base colors - Clean professional palette */
+    --background: 248 250 252; /* slate-50 */
+    --foreground: 215 28% 17%; /* slate-800 */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card system */
+    --card: 0 0% 100%; /* pure white */
+    --card-foreground: 215 28% 17%;
 
+    /* Popover system */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 215 28% 17%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Professional business blue */
+    --primary: 217 91% 60%; /* blue-500 */
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 217 91% 55%;
+    --primary-glow: 217 91% 60% / 0.3;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Complementary teal for accents */
+    --secondary: 174 62% 47%; /* teal-500 */
+    --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 174 62% 42%;
 
+    /* Success - Green for positive actions */
+    --success: 142 76% 36%; /* green-600 */
+    --success-foreground: 0 0% 100%;
+    --success-light: 142 76% 36% / 0.1;
+
+    /* Warning - Amber for alerts */
+    --warning: 43 96% 56%; /* amber-400 */
+    --warning-foreground: 92 10% 10%;
+    --warning-light: 43 96% 56% / 0.1;
+
+    /* Muted backgrounds */
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - Light blue for highlights */
+    --accent: 213 94% 68% / 0.1; /* blue-400 with opacity */
+    --accent-foreground: 217 91% 60%;
 
+    /* Destructive - Red for dangerous actions */
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Borders and inputs */
+    --border: 220 13% 91%; /* neutral-200 */
+    --input: 220 13% 91%;
+    --ring: 217 91% 60%;
 
-    --radius: 0.5rem;
+    /* Gradients for visual appeal */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(174 62% 47%));
+    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 76% 46%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(220 13% 97%));
 
-    --sidebar-background: 0 0% 98%;
+    /* Shadows for depth */
+    --shadow-sm: 0 1px 2px hsl(215 28% 17% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(215 28% 17% / 0.1), 0 2px 4px -2px hsl(215 28% 17% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(215 28% 17% / 0.1), 0 4px 6px -4px hsl(215 28% 17% / 0.1);
+    --shadow-glow: 0 0 20px hsl(var(--primary-glow));
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --radius: 0.75rem; /* Slightly more rounded for modern feel */
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark mode colors - Professional dark theme */
+    --background: 222 84% 5%; /* Very dark blue */
+    --foreground: 210 40% 98%; /* Light text */
 
-    --card: 222.2 84% 4.9%;
+    /* Card system */
+    --card: 224 71% 4%; /* Slightly lighter than background */
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    /* Popover system */
+    --popover: 224 71% 4%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Primary stays the same - good contrast in dark */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 217 91% 55%;
+    --primary-glow: 217 91% 60% / 0.4;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    /* Secondary adjusted for dark mode */
+    --secondary: 174 62% 47%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 174 62% 42%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    /* Success, warning, destructive - good contrast */
+    --success: 142 76% 46%; /* Slightly brighter for dark mode */
+    --success-foreground: 0 0% 100%;
+    --success-light: 142 76% 46% / 0.15;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --warning: 43 96% 66%; /* Brighter for visibility */
+    --warning-foreground: 92 10% 10%;
+    --warning-light: 43 96% 66% / 0.15;
 
-    --destructive: 0 62.8% 30.6%;
+    /* Muted backgrounds for dark mode */
+    --muted: 217 32% 18%; /* Dark but not too dark */
+    --muted-foreground: 215 20% 65%;
+
+    /* Accent for dark mode */
+    --accent: 213 94% 68% / 0.15;
+    --accent-foreground: 217 91% 60%;
+
+    /* Destructive */
+    --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Borders and inputs for dark mode */
+    --border: 217 32% 18%;
+    --input: 217 32% 18%;
+    --ring: 217 91% 60%;
+
+    /* Dark mode gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(174 62% 47%));
+    --gradient-success: linear-gradient(135deg, hsl(142 76% 46%), hsl(142 76% 56%));
+    --gradient-card: linear-gradient(145deg, hsl(224 71% 4%), hsl(217 32% 8%));
+
+    /* Enhanced shadows for dark mode */
+    --shadow-sm: 0 1px 3px hsl(0 0% 0% / 0.2);
+    --shadow-md: 0 4px 8px hsl(0 0% 0% / 0.3), 0 2px 4px hsl(0 0% 0% / 0.2);
+    --shadow-lg: 0 10px 20px hsl(0 0% 0% / 0.4), 0 4px 8px hsl(0 0% 0% / 0.3);
   }
 }
 
@@ -100,6 +142,65 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
+}
+
+@layer components {
+  /* Mobile-first FAB component */
+  .fab-container {
+    @apply fixed bottom-20 right-4 z-50;
+  }
+
+  .fab {
+    @apply w-14 h-14 rounded-full shadow-lg;
+    @apply bg-gradient-to-r from-primary to-secondary;
+    @apply text-primary-foreground;
+    @apply flex items-center justify-center;
+    @apply transition-all duration-300 ease-out;
+    @apply hover:scale-110 active:scale-95;
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Stats card with gradient background */
+  .stats-card {
+    @apply relative overflow-hidden rounded-xl p-6;
+    @apply bg-gradient-to-br from-card to-muted/20;
+    @apply border border-border/50;
+    @apply shadow-md;
+  }
+
+  /* Mobile bottom navigation */
+  .bottom-nav {
+    @apply fixed bottom-0 left-0 right-0 z-40;
+    @apply bg-card/95 backdrop-blur-sm;
+    @apply border-t border-border;
+    @apply h-16 flex items-center justify-around;
+    @apply px-2 py-1;
+  }
+
+  /* Smooth animations */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  /* Chart container */
+  .chart-container {
+    @apply bg-card rounded-xl p-4 shadow-sm border border-border/50;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
