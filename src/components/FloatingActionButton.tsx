@@ -1,21 +1,34 @@
 import { useState } from "react";
-import { Plus, Package, Users, UserPlus, Receipt } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { Plus, Package, ShoppingCart, Users, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const quickActions = [
-  { icon: Package, label: "Add Item", action: "add-inventory" },
-  { icon: UserPlus, label: "Add Vendor", action: "add-vendor" },
-  { icon: Users, label: "Add Customer", action: "add-customer" },
-  { icon: Receipt, label: "New Invoice", action: "new-invoice" },
-];
+import { useAuth } from "@/hooks/useAuth";
 
 export const FloatingActionButton = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  const { isAdmin } = useAuth();
 
-  const handleAction = (action: string) => {
-    console.log(`Executing action: ${action}`);
+  // Hide FAB on auth page
+  if (location.pathname === '/auth') {
+    return null;
+  }
+
+  const baseActions = [
+    { icon: Package, label: "Add Product", action: () => console.log("Add Product") },
+    { icon: ShoppingCart, label: "New Sale", action: () => console.log("New Sale") },
+  ];
+
+  const adminActions = [
+    { icon: Users, label: "Add Customer", action: () => console.log("Add Customer") },
+    { icon: Building2, label: "Add Vendor", action: () => console.log("Add Vendor") },
+  ];
+
+  const quickActions = isAdmin ? [...baseActions, ...adminActions] : baseActions;
+
+  const handleAction = (action: () => void) => {
+    action();
     setIsOpen(false);
-    // TODO: Implement action handlers
   };
 
   return (
@@ -25,7 +38,7 @@ export const FloatingActionButton = () => {
         <div className="absolute bottom-16 right-0 flex flex-col gap-3 animate-slide-up">
           {quickActions.map(({ icon: Icon, label, action }) => (
             <Button
-              key={action}
+              key={label}
               onClick={() => handleAction(action)}
               className="fab-action w-12 h-12 rounded-full bg-card text-foreground shadow-md border border-border/50 hover:bg-muted hover:scale-105 transition-all duration-200"
               size="sm"
