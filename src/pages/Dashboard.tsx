@@ -7,46 +7,63 @@ import {
   AlertTriangle,
   ShoppingCart
 } from "lucide-react";
+import { useInventory } from "@/hooks/useInventory";
+import { useSales } from "@/hooks/useSales";
+import { useCustomers } from "@/hooks/useCustomers";
 
 export default function Dashboard() {
-  // Mock data - will be replaced with real data later
+  const { stockSummary, loading: inventoryLoading } = useInventory();
+  const { invoices, todaysRevenue, todaysInvoices, loading: salesLoading } = useSales();
+  const { customers, loading: customersLoading } = useCustomers();
+
+  const loading = inventoryLoading || salesLoading || customersLoading;
+
+  // Calculate real stats
+  const lowStockItems = stockSummary.filter(item => item.status === 'low_stock').length;
+  const outOfStockItems = stockSummary.filter(item => item.status === 'out_of_stock').length;
+  const criticalAlerts = outOfStockItems;
+
   const stats = [
     {
-      title: "Total Sales",
-      value: "₹12,450",
-      change: "+12% from last month",
+      title: "Today's Sales",
+      value: loading ? "Loading..." : `₹${todaysRevenue.toLocaleString()}`,
+      change: `${todaysInvoices.length} transactions today`,
       changeType: "positive" as const,
       icon: DollarSign,
       gradient: true
     },
     {
       title: "Inventory Items",
-      value: "1,247",
-      change: "+23 new items",
-      changeType: "positive" as const,
+      value: loading ? "Loading..." : stockSummary.length.toString(),
+      change: `${lowStockItems} low stock items`,
+      changeType: lowStockItems > 0 ? "negative" as const : "positive" as const,
       icon: Package
     },
     {
       title: "Active Customers",
-      value: "89",
-      change: "+5 this week",
-      changeType: "positive" as const,
+      value: loading ? "Loading..." : customers.length.toString(),
+      change: "Total registered",
+      changeType: "neutral" as const,
       icon: Users
     },
     {
-      title: "Low Stock Alerts",
-      value: "12",
-      change: "3 critical",
-      changeType: "negative" as const,
+      title: "Stock Alerts",
+      value: loading ? "Loading..." : (lowStockItems + outOfStockItems).toString(),
+      change: `${criticalAlerts} critical`,
+      changeType: criticalAlerts > 0 ? "negative" as const : "positive" as const,
       icon: AlertTriangle
     }
   ];
 
-  const recentSales = [
-    { id: 1, customer: "Rajesh Kumar", amount: "₹850", time: "10 min ago" },
-    { id: 2, customer: "Priya Sharma", amount: "₹650", time: "25 min ago" },
-    { id: 3, customer: "Amit Singh", amount: "₹1,200", time: "1 hour ago" },
-  ];
+  const recentSales = loading ? [] : invoices.slice(0, 3).map(invoice => ({
+    id: invoice.id,
+    customer: invoice.customers?.name || "Walk-in Customer",
+    amount: `₹${invoice.total_amount.toLocaleString()}`,
+    time: new Date(invoice.created_at).toLocaleTimeString([], { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    }),
+  }));
 
   return (
     <div className="min-h-screen bg-background pb-20 pt-4">

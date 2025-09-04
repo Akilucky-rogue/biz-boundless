@@ -2,53 +2,23 @@ import { useState } from "react";
 import { Search, Filter, Package, AlertTriangle, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useInventory } from "@/hooks/useInventory";
 
 export default function Inventory() {
   const [searchTerm, setSearchTerm] = useState("");
+  const { stockSummary, loading } = useInventory();
 
-  // Mock inventory data
-  const inventoryItems = [
-    {
-      id: 1,
-      name: "Rice Basmati 1kg",
-      category: "Grains",
-      stock: 150,
-      unit: "kg",
-      price: 85,
-      lowStockAlert: 20,
-      status: "in_stock"
-    },
-    {
-      id: 2,
-      name: "Sugar 1kg",
-      category: "Sweeteners",
-      stock: 8,
-      unit: "kg",
-      price: 45,
-      lowStockAlert: 10,
-      status: "low_stock"
-    },
-    {
-      id: 3,
-      name: "Cooking Oil 1L",
-      category: "Oils",
-      stock: 45,
-      unit: "L",
-      price: 120,
-      lowStockAlert: 15,
-      status: "in_stock"
-    },
-    {
-      id: 4,
-      name: "Wheat Flour 1kg",
-      category: "Grains",
-      stock: 0,
-      unit: "kg",
-      price: 35,
-      lowStockAlert: 25,
-      status: "out_of_stock"
-    }
-  ];
+  const inventoryItems = stockSummary.map(item => ({
+    id: item.product_id,
+    name: item.product_name,
+    category: "General", // We can enhance this later with category lookup
+    stock: item.total_stock,
+    unit: item.unit,
+    price: item.selling_price,
+    lowStockAlert: item.min_stock_level || 0,
+    status: item.status
+  }));
+
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -101,15 +71,21 @@ export default function Inventory() {
         {/* Stats Summary */}
         <div className="grid grid-cols-3 gap-3 mb-6">
           <div className="bg-card rounded-lg p-3 text-center border border-border/50">
-            <p className="text-lg font-bold text-foreground">156</p>
+            <p className="text-lg font-bold text-foreground">
+              {loading ? "..." : inventoryItems.length}
+            </p>
             <p className="text-xs text-muted-foreground">Total Items</p>
           </div>
           <div className="bg-card rounded-lg p-3 text-center border border-border/50">
-            <p className="text-lg font-bold text-warning">8</p>
+            <p className="text-lg font-bold text-warning">
+              {loading ? "..." : inventoryItems.filter(item => item.status === 'low_stock').length}
+            </p>
             <p className="text-xs text-muted-foreground">Low Stock</p>
           </div>
           <div className="bg-card rounded-lg p-3 text-center border border-border/50">
-            <p className="text-lg font-bold text-destructive">3</p>
+            <p className="text-lg font-bold text-destructive">
+              {loading ? "..." : inventoryItems.filter(item => item.status === 'out_of_stock').length}
+            </p>
             <p className="text-xs text-muted-foreground">Out of Stock</p>
           </div>
         </div>

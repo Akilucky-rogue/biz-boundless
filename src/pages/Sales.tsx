@@ -2,53 +2,26 @@ import { useState } from "react";
 import { Search, Plus, Receipt, Calendar, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useSales } from "@/hooks/useSales";
 
 export default function Sales() {
   const [searchTerm, setSearchTerm] = useState("");
+  const { invoices, loading, todaysRevenue, todaysInvoices } = useSales();
 
-  // Mock sales data
-  const salesData = [
-    {
-      id: "INV-001",
-      customer: "Rajesh Kumar",
-      amount: 1250,
-      items: 5,
-      date: "2024-01-15",
-      time: "10:30 AM",
-      status: "paid",
-      paymentMethod: "cash"
-    },
-    {
-      id: "INV-002",
-      customer: "Priya Sharma",
-      amount: 850,
-      items: 3,
-      date: "2024-01-15",
-      time: "11:45 AM",
-      status: "paid",
-      paymentMethod: "upi"
-    },
-    {
-      id: "INV-003",
-      customer: "Amit Singh",
-      amount: 2100,
-      items: 8,
-      date: "2024-01-14",
-      time: "3:20 PM",
-      status: "pending",
-      paymentMethod: "credit"
-    },
-    {
-      id: "INV-004",
-      customer: "Sneha Patel",
-      amount: 650,
-      items: 2,
-      date: "2024-01-14",
-      time: "4:15 PM",
-      status: "paid",
-      paymentMethod: "cash"
-    }
-  ];
+  const salesData = invoices.map(invoice => ({
+    id: invoice.invoice_number,
+    customer: invoice.customers?.name || "Walk-in Customer",
+    amount: invoice.total_amount,
+    items: invoice.invoice_items?.length || 0,
+    date: new Date(invoice.created_at).toLocaleDateString(),
+    time: new Date(invoice.created_at).toLocaleTimeString([], { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    }),
+    status: invoice.payment_status,
+    paymentMethod: "cash" // We can enhance this later with actual payment method tracking
+  }));
+
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -73,9 +46,6 @@ export default function Sales() {
     sale.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const todaysSales = salesData.filter(sale => sale.date === "2024-01-15");
-  const todaysRevenue = todaysSales.reduce((sum, sale) => sum + sale.amount, 0);
-
   return (
     <div className="min-h-screen bg-background pb-20 pt-4">
       <div className="px-4">
@@ -93,11 +63,15 @@ export default function Sales() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-2xl font-bold">₹{todaysRevenue.toLocaleString()}</p>
+              <p className="text-2xl font-bold">
+                {loading ? "Loading..." : `₹${todaysRevenue.toLocaleString()}`}
+              </p>
               <p className="text-sm text-primary-foreground/80">Total Revenue</p>
             </div>
             <div>
-              <p className="text-2xl font-bold">{todaysSales.length}</p>
+              <p className="text-2xl font-bold">
+                {loading ? "..." : todaysInvoices.length}
+              </p>
               <p className="text-sm text-primary-foreground/80">Transactions</p>
             </div>
           </div>
@@ -125,7 +99,16 @@ export default function Sales() {
 
         {/* Sales List */}
         <div className="space-y-3">
-          {filteredSales.map((sale) => (
+          {loading ? (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">Loading sales data...</p>
+            </div>
+          ) : filteredSales.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">No sales found</p>
+            </div>
+          ) : (
+            filteredSales.map((sale) => (
             <div key={sale.id} className="bg-card rounded-xl p-4 shadow-sm border border-border/50">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-start gap-3">
@@ -169,7 +152,8 @@ export default function Sales() {
                 </Button>
               </div>
             </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>
