@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Invoice {
   id: string;
@@ -39,8 +40,14 @@ export const useSales = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const { isAdmin } = useAuth();
 
   const fetchInvoices = async () => {
+    if (!isAdmin) {
+      setLoading(false);
+      return;
+    }
+    
     try {
       const { data, error } = await supabase
         .from('invoices')
@@ -188,7 +195,7 @@ export const useSales = () => {
 
   useEffect(() => {
     fetchInvoices();
-  }, []);
+  }, [isAdmin]);
 
   return {
     invoices,

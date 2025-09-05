@@ -2,11 +2,31 @@ import { useState } from "react";
 import { Search, Plus, Receipt, Calendar, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSales } from "@/hooks/useSales";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Sales() {
   const [searchTerm, setSearchTerm] = useState("");
   const { invoices, loading, todaysRevenue, todaysInvoices } = useSales();
+  const { isAdmin } = useAuth();
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center pb-20">
+        <Card className="text-center max-w-md mx-4">
+          <CardHeader>
+            <CardTitle className="text-destructive">Access Restricted</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground">
+              Only administrators can access sales and financial data.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   const salesData = invoices.map(invoice => ({
     id: invoice.invoice_number,
