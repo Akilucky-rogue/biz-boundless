@@ -3,10 +3,14 @@ import { Search, Filter, Package, AlertTriangle, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useInventory } from "@/hooks/useInventory";
+import { ProductModal } from "@/components/ProductModal";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Inventory() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [showProductModal, setShowProductModal] = useState(false);
   const { stockSummary, loading } = useInventory();
+  const { isAdmin } = useAuth();
 
   const inventoryItems = stockSummary.map(item => ({
     id: item.product_id,
@@ -47,9 +51,15 @@ export default function Inventory() {
     <div className="min-h-screen bg-background pb-20 pt-4">
       <div className="px-4">
         {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-foreground">Inventory</h1>
-          <p className="text-muted-foreground">Manage your product catalog and stock levels</p>
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Inventory</h1>
+            <p className="text-muted-foreground">Manage your product catalog and stock levels</p>
+          </div>
+          <Button variant="gradient" onClick={() => setShowProductModal(true)}>
+            <Plus size={16} className="mr-2" />
+            Add Product
+          </Button>
         </div>
 
         {/* Search and Filter */}
@@ -132,6 +142,11 @@ export default function Inventory() {
           ))}
         </div>
       </div>
+      
+      <ProductModal 
+        open={showProductModal} 
+        onClose={() => setShowProductModal(false)} 
+      />
     </div>
   );
 }

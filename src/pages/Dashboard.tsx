@@ -10,11 +10,13 @@ import {
 import { useInventory } from "@/hooks/useInventory";
 import { useSales } from "@/hooks/useSales";
 import { useCustomers } from "@/hooks/useCustomers";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const { stockSummary, loading: inventoryLoading } = useInventory();
   const { invoices, todaysRevenue, todaysInvoices, loading: salesLoading } = useSales();
   const { customers, loading: customersLoading } = useCustomers();
+  const navigate = useNavigate();
 
   const loading = inventoryLoading || salesLoading || customersLoading;
 
@@ -117,12 +119,18 @@ export default function Dashboard() {
         <div className="bg-card rounded-xl p-4 shadow-sm border border-border/50">
           <h2 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h2>
           <div className="grid grid-cols-2 gap-3">
-            <button className="p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors">
+            <button 
+              className="p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
+              onClick={() => navigate('/inventory')}
+            >
               <Package className="text-primary mb-2" size={20} />
               <p className="font-medium text-foreground">Add Inventory</p>
               <p className="text-xs text-muted-foreground">Manage stock levels</p>
             </button>
-            <button className="p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors">
+            <button 
+              className="p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
+              onClick={() => navigate('/customers')}
+            >
               <Users className="text-secondary mb-2" size={20} />
               <p className="font-medium text-foreground">New Customer</p>
               <p className="text-xs text-muted-foreground">Add customer details</p>

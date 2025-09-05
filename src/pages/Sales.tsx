@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSales } from "@/hooks/useSales";
 import { useAuth } from "@/hooks/useAuth";
+import { InvoiceModal } from "@/components/InvoiceModal";
 
 export default function Sales() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
   const { invoices, loading, todaysRevenue, todaysInvoices } = useSales();
   const { isAdmin } = useAuth();
 
@@ -111,7 +113,7 @@ export default function Sales() {
           <Button variant="outline" size="icon">
             <Filter size={18} />
           </Button>
-          <Button className="bg-gradient-primary hover:opacity-90" variant="gradient">
+          <Button className="bg-gradient-primary hover:opacity-90" variant="gradient" onClick={() => setShowInvoiceModal(true)}>
             <Plus size={18} className="mr-2" />
             New Invoice
           </Button>
@@ -164,10 +166,16 @@ export default function Sales() {
               </div>
 
               <div className="flex gap-2 mt-3 pt-3 border-t border-border/30">
-                <Button variant="outline" size="sm" className="flex-1">
+                <Button variant="outline" size="sm" className="flex-1" onClick={() => {
+                  // We'll implement invoice details view later
+                  console.log('View invoice details:', sale.id);
+                }}>
                   View Details
                 </Button>
-                <Button variant="outline" size="sm" className="flex-1">
+                <Button variant="outline" size="sm" className="flex-1" onClick={() => {
+                  // We'll implement PDF generation later
+                  console.log('Print PDF for invoice:', sale.id);
+                }}>
                   Print PDF
                 </Button>
               </div>
@@ -176,6 +184,11 @@ export default function Sales() {
           )}
         </div>
       </div>
+      
+      <InvoiceModal 
+        open={showInvoiceModal} 
+        onClose={() => setShowInvoiceModal(false)} 
+      />
     </div>
   );
 }
