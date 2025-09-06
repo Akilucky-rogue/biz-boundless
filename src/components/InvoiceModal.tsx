@@ -25,7 +25,7 @@ interface InvoiceItem {
 }
 
 export const InvoiceModal = ({ open, onClose }: InvoiceModalProps) => {
-  const [selectedCustomer, setSelectedCustomer] = useState<string>('');
+  const [selectedCustomer, setSelectedCustomer] = useState<string>('walk-in');
   const [items, setItems] = useState<InvoiceItem[]>([
     { product_id: '', quantity: 1, unit_price: 0, tax_rate: 18 }
   ]);
@@ -94,7 +94,7 @@ export const InvoiceModal = ({ open, onClose }: InvoiceModalProps) => {
     
     try {
       const result = await createInvoice({
-        customer_id: selectedCustomer || undefined,
+        customer_id: selectedCustomer === 'walk-in' ? undefined : selectedCustomer || undefined,
         items: items.map(item => ({
           product_id: item.product_id,
           quantity: item.quantity,
@@ -112,7 +112,7 @@ export const InvoiceModal = ({ open, onClose }: InvoiceModalProps) => {
         });
         onClose();
         // Reset form
-        setSelectedCustomer('');
+        setSelectedCustomer('walk-in');
         setItems([{ product_id: '', quantity: 1, unit_price: 0, tax_rate: 18 }]);
         setDiscountAmount(0);
         setNotes('');
@@ -140,7 +140,7 @@ export const InvoiceModal = ({ open, onClose }: InvoiceModalProps) => {
                 <SelectValue placeholder="Select customer or leave blank for walk-in" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Walk-in Customer</SelectItem>
+                <SelectItem value="walk-in">Walk-in Customer</SelectItem>
                 {customers.map((customer) => (
                   <SelectItem key={customer.id} value={customer.id}>
                     {customer.name}
