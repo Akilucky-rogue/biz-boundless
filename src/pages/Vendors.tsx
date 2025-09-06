@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { VendorModal } from '@/components/VendorModal';
 
 interface Vendor {
   id: string;
@@ -23,6 +24,8 @@ const Vendors = () => {
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+  const [showVendorModal, setShowVendorModal] = useState(false);
+  const [selectedVendor, setSelectedVendor] = useState<Vendor | undefined>(undefined);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -46,6 +49,42 @@ const Vendors = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAddVendor = () => {
+    setSelectedVendor(undefined);
+    setShowVendorModal(true);
+  };
+
+  const handleEditVendor = (vendor: Vendor) => {
+    setSelectedVendor(vendor);
+    setShowVendorModal(true);
+  };
+
+  const handleDeleteVendor = async (vendorId: string, vendorName: string) => {
+    if (window.confirm(`Are you sure you want to delete ${vendorName}?`)) {
+      try {
+        const { error } = await supabase
+          .from('vendors')
+          .update({ is_active: false })
+          .eq('id', vendorId);
+
+        if (error) throw error;
+
+        toast({
+          title: 'Success',
+          description: 'Vendor deleted successfully',
+        });
+        
+        fetchVendors();
+      } catch (error: any) {
+        toast({
+          title: 'Error',
+          description: 'Failed to delete vendor',
+          variant: 'destructive',
+        });
+      }
     }
   };
 
@@ -88,7 +127,7 @@ const Vendors = () => {
           <h1 className="text-2xl font-bold text-foreground">Vendors</h1>
           <p className="text-muted-foreground">Manage your supplier relationships</p>
         </div>
-        <Button variant="gradient" className="gap-2">
+        <Button variant="gradient" className="gap-2" onClick={handleAddVendor}>
           <Plus size={20} />
           Add Vendor
         </Button>
@@ -186,11 +225,21 @@ const Vendors = () => {
                 </div>
               )}
               <div className="flex gap-2 pt-3">
-                <Button variant="outline" size="sm" className="flex-1 gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex-1 gap-2"
+                  onClick={() => handleEditVendor(vendor)}
+                >
                   <Edit size={14} />
                   Edit
                 </Button>
-                <Button variant="outline" size="sm" className="gap-2 text-destructive">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="gap-2 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                  onClick={() => handleDeleteVendor(vendor.id, vendor.name)}
+                >
                   <Trash2 size={14} />
                 </Button>
               </div>
@@ -206,12 +255,23 @@ const Vendors = () => {
           <p className="text-muted-foreground mb-4">
             {searchTerm ? 'Try adjusting your search terms.' : 'Get started by adding your first vendor.'}
           </p>
-          <Button variant="gradient" className="gap-2">
+          <Button variant="gradient" className="gap-2" onClick={handleAddVendor}>
             <Plus size={20} />
             Add Vendor
           </Button>
         </div>
       )}
+
+      {/* Vendor Modal */}
+      <VendorModal 
+        open={showVendorModal} 
+        onClose={() => {
+          setShowVendorModal(false);
+          setSelectedVendor(undefined);
+          fetchVendors();
+        }} 
+        vendor={selectedVendor}
+      />
     </div>
   );
 };

@@ -29,6 +29,7 @@ export const FloatingActionButton = () => {
   const adminActions = [
     { icon: Users, label: "Add Customer", action: () => setShowCustomerModal(true) },
     { icon: Building2, label: "Add Vendor", action: () => navigate('/vendors') },
+    { icon: Package, label: "View Catalogue", action: () => navigate('/catalogue') },
   ];
 
   const quickActions = isAdmin ? [...baseActions, ...adminActions] : baseActions;
