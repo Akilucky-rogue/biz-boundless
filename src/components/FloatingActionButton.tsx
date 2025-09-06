@@ -1,12 +1,19 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Plus, Package, ShoppingCart, Users, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { InvoiceModal } from "@/components/InvoiceModal";
+import { CustomerModal } from "@/components/CustomerModal";
+import { ProductModal } from "@/components/ProductModal";
 
 export const FloatingActionButton = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+  const [showCustomerModal, setShowCustomerModal] = useState(false);
+  const [showProductModal, setShowProductModal] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { isAdmin } = useAuth();
 
   // Hide FAB on auth page
@@ -15,13 +22,13 @@ export const FloatingActionButton = () => {
   }
 
   const baseActions = [
-    { icon: Package, label: "Add Product", action: () => console.log("Add Product") },
-    { icon: ShoppingCart, label: "New Sale", action: () => console.log("New Sale") },
+    { icon: Package, label: "Add Product", action: () => setShowProductModal(true) },
+    { icon: ShoppingCart, label: "New Sale", action: () => setShowInvoiceModal(true) },
   ];
 
   const adminActions = [
-    { icon: Users, label: "Add Customer", action: () => console.log("Add Customer") },
-    { icon: Building2, label: "Add Vendor", action: () => console.log("Add Vendor") },
+    { icon: Users, label: "Add Customer", action: () => setShowCustomerModal(true) },
+    { icon: Building2, label: "Add Vendor", action: () => navigate('/vendors') },
   ];
 
   const quickActions = isAdmin ? [...baseActions, ...adminActions] : baseActions;
@@ -58,6 +65,11 @@ export const FloatingActionButton = () => {
       >
         <Plus size={24} />
       </Button>
+
+      {/* Modals */}
+      <InvoiceModal open={showInvoiceModal} onClose={() => setShowInvoiceModal(false)} />
+      <CustomerModal open={showCustomerModal} onClose={() => setShowCustomerModal(false)} />
+      <ProductModal open={showProductModal} onClose={() => setShowProductModal(false)} />
     </div>
   );
 };
