@@ -5,11 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSales } from "@/hooks/useSales";
 import { useAuth } from "@/hooks/useAuth";
-import { InvoiceModal } from "@/components/InvoiceModal";
+import { ImprovedInvoiceModal } from "@/components/ImprovedInvoiceModal";
+import { InvoiceDetailsModal } from "@/components/InvoiceDetailsModal";
 
 export default function Sales() {
   const [searchTerm, setSearchTerm] = useState("");
   const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [selectedInvoiceId, setSelectedInvoiceId] = useState("");
   const { invoices, loading, todaysRevenue, todaysInvoices } = useSales();
   const { isAdmin } = useAuth();
 
@@ -167,14 +170,14 @@ export default function Sales() {
 
               <div className="flex gap-2 mt-3 pt-3 border-t border-border/30">
                 <Button variant="outline" size="sm" className="flex-1" onClick={() => {
-                  // We'll implement invoice details view later
-                  console.log('View invoice details:', sale.id);
+                  setSelectedInvoiceId(sale.id);
+                  setShowDetailsModal(true);
                 }}>
                   View Details
                 </Button>
                 <Button variant="outline" size="sm" className="flex-1" onClick={() => {
-                  // We'll implement PDF generation later
-                  console.log('Print PDF for invoice:', sale.id);
+                  setSelectedInvoiceId(sale.id);
+                  setShowDetailsModal(true);
                 }}>
                   Print PDF
                 </Button>
@@ -185,9 +188,15 @@ export default function Sales() {
         </div>
       </div>
       
-      <InvoiceModal 
+      <ImprovedInvoiceModal 
         open={showInvoiceModal} 
         onClose={() => setShowInvoiceModal(false)} 
+      />
+      
+      <InvoiceDetailsModal
+        open={showDetailsModal}
+        onClose={() => setShowDetailsModal(false)}
+        invoiceId={selectedInvoiceId}
       />
     </div>
   );

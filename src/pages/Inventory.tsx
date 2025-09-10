@@ -3,7 +3,7 @@ import { Search, Filter, Package, AlertTriangle, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useInventory } from "@/hooks/useInventory";
-import { ProductModal } from "@/components/ProductModal";
+import { ImprovedProductModal } from "@/components/ImprovedProductModal";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Inventory() {
@@ -143,7 +143,7 @@ export default function Inventory() {
         </div>
       </div>
       
-      <ProductModal 
+      <ImprovedProductModal 
         open={showProductModal} 
         onClose={() => setShowProductModal(false)} 
       />

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BarChart3, Download, Calendar, TrendingUp, TrendingDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StatsCard } from "@/components/StatsCard";
+import { ReportsActions } from "@/components/ReportsActions";
 
 export default function Reports() {
   const [selectedPeriod, setSelectedPeriod] = useState("week");
@@ -145,24 +146,7 @@ export default function Reports() {
         {/* Export Options */}
         <div className="bg-card rounded-xl p-4 shadow-sm border border-border/50">
           <h2 className="text-lg font-semibold text-foreground mb-4">Export Reports</h2>
-          <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" className="justify-start">
-              <Download size={16} className="mr-2" />
-              Export PDF
-            </Button>
-            <Button variant="outline" className="justify-start">
-              <Download size={16} className="mr-2" />
-              Export CSV
-            </Button>
-            <Button variant="outline" className="justify-start">
-              <Calendar size={16} className="mr-2" />
-              Schedule Report
-            </Button>
-            <Button variant="outline" className="justify-start">
-              <BarChart3 size={16} className="mr-2" />
-              Advanced Analytics
-            </Button>
-          </div>
+          <ReportsActions />
         </div>
       </div>
     </div>

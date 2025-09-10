@@ -11,12 +11,14 @@ import { useInventory } from "@/hooks/useInventory";
 import { useSales } from "@/hooks/useSales";
 import { useCustomers } from "@/hooks/useCustomers";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Dashboard() {
   const { stockSummary, loading: inventoryLoading } = useInventory();
   const { invoices, todaysRevenue, todaysInvoices, loading: salesLoading } = useSales();
   const { customers, loading: customersLoading } = useCustomers();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const loading = inventoryLoading || salesLoading || customersLoading;
 
@@ -121,19 +123,47 @@ export default function Dashboard() {
           <div className="grid grid-cols-2 gap-3">
             <button 
               className="p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
-              onClick={() => navigate('/inventory')}
+              onClick={() => navigate('/purchase')}
             >
               <Package className="text-primary mb-2" size={20} />
-              <p className="font-medium text-foreground">Add Inventory</p>
-              <p className="text-xs text-muted-foreground">Manage stock levels</p>
+              <p className="font-medium text-foreground">Add Purchase</p>
+              <p className="text-xs text-muted-foreground">Create purchase order</p>
             </button>
             <button 
               className="p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
-              onClick={() => navigate('/customers')}
+              onClick={() => navigate('/sales')}
             >
-              <Users className="text-secondary mb-2" size={20} />
-              <p className="font-medium text-foreground">New Customer</p>
-              <p className="text-xs text-muted-foreground">Add customer details</p>
+              <ShoppingCart className="text-secondary mb-2" size={20} />
+              <p className="font-medium text-foreground">Add Sale</p>
+              <p className="text-xs text-muted-foreground">Create new invoice</p>
+            </button>
+            <button 
+              className="p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
+              onClick={() => {
+                // TODO: Implement receive payment functionality
+                toast({
+                  title: "Coming Soon",
+                  description: "Receive payment functionality will be added soon",
+                });
+              }}
+            >
+              <DollarSign className="text-success mb-2" size={20} />
+              <p className="font-medium text-foreground">Receive Payment</p>
+              <p className="text-xs text-muted-foreground">Record customer payments</p>
+            </button>
+            <button 
+              className="p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
+              onClick={() => {
+                // TODO: Implement make payment functionality
+                toast({
+                  title: "Coming Soon",
+                  description: "Make payment functionality will be added soon",
+                });
+              }}
+            >
+              <TrendingUp className="text-warning mb-2" size={20} />
+              <p className="font-medium text-foreground">Make Payment</p>
+              <p className="text-xs text-muted-foreground">Pay vendor bills</p>
             </button>
           </div>
         </div>

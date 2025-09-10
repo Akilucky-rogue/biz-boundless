@@ -13,6 +13,7 @@ import Sales from "./pages/Sales";
 import Reports from "./pages/Reports";
 import Vendors from "./pages/Vendors";
 import Customers from "./pages/Customers";
+import Purchase from "./pages/Purchase";
 import ProductCatalogue from "./pages/ProductCatalogue";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -57,6 +58,11 @@ const App = () => (
               <Route path="/customers" element={
                 <ProtectedRoute adminOnly={true}>
                   <Customers />
+                </ProtectedRoute>
+              } />
+              <Route path="/purchase" element={
+                <ProtectedRoute>
+                  <Purchase />
                 </ProtectedRoute>
               } />
               <Route path="/catalogue" element={
