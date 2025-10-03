@@ -141,80 +141,72 @@ export default function Customers() {
           </Card>
         </div>
 
-        {/* Customers List */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filteredCustomers.map((customer) => (
-            <Card key={customer.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg">{customer.name}</CardTitle>
-                    {customer.credit_limit && customer.credit_limit > 0 && (
-                      <p className="text-sm text-muted-foreground">
-                        Credit: {formatCurrency(customer.credit_limit)}
-                      </p>
+        {/* Customers Table */}
+        <div className="border rounded-lg overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-muted/50">
+              <tr>
+                <th className="text-left p-3 font-medium">Name</th>
+                <th className="text-left p-3 font-medium">Phone</th>
+                <th className="text-left p-3 font-medium">Email</th>
+                <th className="text-left p-3 font-medium">Outstanding</th>
+                <th className="text-left p-3 font-medium">Credit Limit</th>
+                <th className="text-left p-3 font-medium">Status</th>
+                <th className="text-right p-3 font-medium">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCustomers.map((customer) => (
+                <tr key={customer.id} className="border-t hover:bg-muted/30 transition-colors">
+                  <td className="p-3">
+                    <div className="font-medium">{customer.name}</div>
+                    {customer.gstin && (
+                      <div className="text-xs text-muted-foreground">GST: {customer.gstin}</div>
                     )}
-                  </div>
-                  <Badge variant={customer.is_active ? 'secondary' : 'outline'}>
-                    {customer.is_active ? 'Active' : 'Inactive'}
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {customer.phone && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Phone size={16} className="text-muted-foreground" />
-                    <span>{customer.phone}</span>
-                  </div>
-                )}
-                {customer.email && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Mail size={16} className="text-muted-foreground" />
-                    <span className="truncate">{customer.email}</span>
-                  </div>
-                )}
-                {customer.address && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin size={16} className="text-muted-foreground" />
-                    <span className="truncate">{customer.address}</span>
-                  </div>
-                )}
-                {customer.gstin && (
-                  <div className="pt-2 border-t">
-                    <Badge variant="outline" className="text-xs">
-                      GST: {customer.gstin}
+                  </td>
+                  <td className="p-3">{customer.phone || '-'}</td>
+                  <td className="p-3 text-sm">{customer.email || '-'}</td>
+                  <td className="p-3">
+                    <span className="font-medium text-success">₹0.00</span>
+                  </td>
+                  <td className="p-3">
+                    {customer.credit_limit ? formatCurrency(customer.credit_limit) : '-'}
+                  </td>
+                  <td className="p-3">
+                    <Badge variant={customer.is_active ? 'secondary' : 'outline'}>
+                      {customer.is_active ? 'Active' : 'Inactive'}
                     </Badge>
-                  </div>
-                )}
-                <div className="flex gap-2 pt-3">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="flex-1 gap-2" 
-                    onClick={() => {
-                      setSelectedCustomer(customer);
-                      setShowCustomerModal(true);
-                    }}
-                  >
-                    <Edit size={14} />
-                    Edit
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="gap-2 text-destructive" 
-                    onClick={() => {
-                      // We'll implement delete confirmation later
-                      console.log('Delete customer:', customer.id);
-                    }}
-                  >
-                    <Trash2 size={14} />
-                    Delete
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                  </td>
+                  <td className="p-3">
+                    <div className="flex gap-2 justify-end">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => {
+                          setSelectedCustomer(customer);
+                          setShowCustomerModal(true);
+                        }}
+                      >
+                        <Edit size={14} className="mr-1" />
+                        Edit
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                        onClick={() => {
+                          // We'll implement delete confirmation later
+                          console.log('Delete customer:', customer.id);
+                        }}
+                      >
+                        <Trash2 size={14} />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         {filteredCustomers.length === 0 && (

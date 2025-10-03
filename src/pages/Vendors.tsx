@@ -181,71 +181,64 @@ const Vendors = () => {
         </Card>
       </div>
 
-      {/* Vendors List */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filteredVendors.map((vendor) => (
-          <Card key={vendor.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-3">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <CardTitle className="text-lg">{vendor.name}</CardTitle>
-                  {vendor.contact_person && (
-                    <p className="text-sm text-muted-foreground">{vendor.contact_person}</p>
+      {/* Vendors Table */}
+      <div className="border rounded-lg overflow-hidden">
+        <table className="w-full">
+          <thead className="bg-muted/50">
+            <tr>
+              <th className="text-left p-3 font-medium">Name</th>
+              <th className="text-left p-3 font-medium">Contact</th>
+              <th className="text-left p-3 font-medium">Phone</th>
+              <th className="text-left p-3 font-medium">Email</th>
+              <th className="text-left p-3 font-medium">Outstanding</th>
+              <th className="text-left p-3 font-medium">Status</th>
+              <th className="text-right p-3 font-medium">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredVendors.map((vendor) => (
+              <tr key={vendor.id} className="border-t hover:bg-muted/30 transition-colors">
+                <td className="p-3">
+                  <div className="font-medium">{vendor.name}</div>
+                  {vendor.gstin && (
+                    <div className="text-xs text-muted-foreground">GST: {vendor.gstin}</div>
                   )}
-                </div>
-                <Badge variant={vendor.is_active ? 'secondary' : 'outline'}>
-                  {vendor.is_active ? 'Active' : 'Inactive'}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {vendor.phone && (
-                <div className="flex items-center gap-2 text-sm">
-                  <Phone size={16} className="text-muted-foreground" />
-                  <span>{vendor.phone}</span>
-                </div>
-              )}
-              {vendor.email && (
-                <div className="flex items-center gap-2 text-sm">
-                  <Mail size={16} className="text-muted-foreground" />
-                  <span className="truncate">{vendor.email}</span>
-                </div>
-              )}
-              {vendor.address && (
-                <div className="flex items-center gap-2 text-sm">
-                  <MapPin size={16} className="text-muted-foreground" />
-                  <span className="truncate">{vendor.address}</span>
-                </div>
-              )}
-              {vendor.gstin && (
-                <div className="pt-2 border-t">
-                  <Badge variant="outline" className="text-xs">
-                    GST: {vendor.gstin}
+                </td>
+                <td className="p-3">{vendor.contact_person || '-'}</td>
+                <td className="p-3">{vendor.phone || '-'}</td>
+                <td className="p-3 text-sm">{vendor.email || '-'}</td>
+                <td className="p-3">
+                  <span className="font-medium text-warning">₹0.00</span>
+                </td>
+                <td className="p-3">
+                  <Badge variant={vendor.is_active ? 'secondary' : 'outline'}>
+                    {vendor.is_active ? 'Active' : 'Inactive'}
                   </Badge>
-                </div>
-              )}
-              <div className="flex gap-2 pt-3">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="flex-1 gap-2"
-                  onClick={() => handleEditVendor(vendor)}
-                >
-                  <Edit size={14} />
-                  Edit
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="gap-2 text-destructive hover:bg-destructive hover:text-destructive-foreground"
-                  onClick={() => handleDeleteVendor(vendor.id, vendor.name)}
-                >
-                  <Trash2 size={14} />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                </td>
+                <td className="p-3">
+                  <div className="flex gap-2 justify-end">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => handleEditVendor(vendor)}
+                    >
+                      <Edit size={14} className="mr-1" />
+                      Edit
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                      onClick={() => handleDeleteVendor(vendor.id, vendor.name)}
+                    >
+                      <Trash2 size={14} />
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {filteredVendors.length === 0 && (

@@ -15,6 +15,8 @@ const adminNavItems = [
   { path: "/customers", icon: Users, label: "Customers" },
 ];
 
+const catalogueItem = { path: "/catalogue", icon: Package, label: "Catalogue" };
+
 export const BottomNavigation = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -30,52 +32,56 @@ export const BottomNavigation = () => {
     navigate('/auth');
   };
 
-  const displayItems = isAdmin ? [...navItems, ...adminNavItems] : navItems;
+  const displayItems = isAdmin 
+    ? [...navItems, ...adminNavItems, catalogueItem] 
+    : [...navItems, catalogueItem];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border safe-bottom">
-      <div className="flex items-center px-2 py-2">
-        {/* Main Navigation Items */}
-        <div className="flex flex-1">
-          {displayItems.map(({ path, icon: Icon, label }) => {
-            const isActive = location.pathname === path;
-            
-            return (
-              <NavLink
-                key={path}
-                to={path}
-                className={`flex flex-col items-center justify-center min-w-0 flex-1 py-2 px-1 rounded-lg transition-all duration-200 ${
-                  isActive 
-                    ? "text-primary bg-accent" 
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                }`}
-              >
-                <Icon size={18} className={`mb-1 ${isActive ? "text-primary" : ""}`} />
-                <span className={`text-xs font-medium truncate ${isActive ? "text-primary" : ""}`}>
-                  {label}
-                </span>
-              </NavLink>
-            );
-          })}
-        </div>
+    <div className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border/50 shadow-lg safe-bottom">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center justify-between px-4 py-2">
+          {/* Main Navigation Items */}
+          <div className="flex gap-1 flex-1">
+            {displayItems.map(({ path, icon: Icon, label }) => {
+              const isActive = location.pathname === path;
+              
+              return (
+                <NavLink
+                  key={path}
+                  to={path}
+                  className={`flex flex-col items-center justify-center px-3 py-2 rounded-xl transition-all duration-200 min-w-[70px] ${
+                    isActive 
+                      ? "bg-primary text-primary-foreground shadow-md" 
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  }`}
+                >
+                  <Icon size={20} className="mb-1" />
+                  <span className="text-xs font-medium">
+                    {label}
+                  </span>
+                </NavLink>
+              );
+            })}
+          </div>
 
-        {/* User Info & Logout */}
-        <div className="flex flex-col items-center px-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleSignOut}
-            className="flex flex-col items-center gap-1 h-auto p-1 text-muted-foreground hover:text-foreground"
-          >
-            <LogOut size={16} />
-            <span className="text-xs">Logout</span>
-          </Button>
-          {profile && (
-            <div className="text-xs text-center text-muted-foreground mt-1">
-              <div className="truncate max-w-16">{profile.full_name}</div>
-              <div className="text-xs capitalize">{profile.role}</div>
-            </div>
-          )}
+          {/* User Info & Logout */}
+          <div className="flex items-center gap-3 border-l border-border/50 pl-3 ml-3">
+            {profile && (
+              <div className="text-right hidden sm:block">
+                <div className="text-sm font-medium text-foreground">{profile.full_name}</div>
+                <div className="text-xs text-muted-foreground capitalize">{profile.role}</div>
+              </div>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSignOut}
+              className="gap-2"
+            >
+              <LogOut size={16} />
+              <span className="hidden sm:inline">Logout</span>
+            </Button>
+          </div>
         </div>
       </div>
     </div>
