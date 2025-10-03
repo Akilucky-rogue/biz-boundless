@@ -87,8 +87,21 @@ export const PurchaseModal = ({ open, onClose }: PurchaseModalProps) => {
     setLoading(true);
     
     try {
-      // Here we would create the purchase order
-      // For now, just show success message
+      const { supabase } = await import('@/integrations/supabase/client');
+      
+      // Create inventory batches for each item
+      for (const item of items) {
+        await supabase.from('inventory_batches').insert({
+          product_id: item.product_id,
+          vendor_id: selectedVendor,
+          quantity: item.quantity,
+          remaining_quantity: item.quantity,
+          purchase_price: item.unit_price,
+          purchased_at: purchaseDate.toISOString(),
+          location: notes || 'Warehouse',
+        });
+      }
+      
       toast({
         title: "Success",
         description: "Purchase order created successfully",

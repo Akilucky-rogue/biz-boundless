@@ -142,16 +142,16 @@ export default function Customers() {
         </div>
 
         {/* Customers Table */}
-        <div className="border rounded-lg overflow-hidden">
-          <table className="w-full">
+        <div className="border rounded-lg overflow-x-auto">
+          <table className="w-full min-w-[800px]">
             <thead className="bg-muted/50">
               <tr>
                 <th className="text-left p-3 font-medium">Name</th>
                 <th className="text-left p-3 font-medium">Phone</th>
-                <th className="text-left p-3 font-medium">Email</th>
+                <th className="text-left p-3 font-medium hidden lg:table-cell">Email</th>
                 <th className="text-left p-3 font-medium">Outstanding</th>
-                <th className="text-left p-3 font-medium">Credit Limit</th>
-                <th className="text-left p-3 font-medium">Status</th>
+                <th className="text-left p-3 font-medium hidden md:table-cell">Credit Limit</th>
+                <th className="text-left p-3 font-medium hidden sm:table-cell">Status</th>
                 <th className="text-right p-3 font-medium">Actions</th>
               </tr>
             </thead>
@@ -165,14 +165,14 @@ export default function Customers() {
                     )}
                   </td>
                   <td className="p-3">{customer.phone || '-'}</td>
-                  <td className="p-3 text-sm">{customer.email || '-'}</td>
+                  <td className="p-3 text-sm hidden lg:table-cell">{customer.email || '-'}</td>
                   <td className="p-3">
                     <span className="font-medium text-success">₹0.00</span>
                   </td>
-                  <td className="p-3">
+                  <td className="p-3 hidden md:table-cell">
                     {customer.credit_limit ? formatCurrency(customer.credit_limit) : '-'}
                   </td>
-                  <td className="p-3">
+                  <td className="p-3 hidden sm:table-cell">
                     <Badge variant={customer.is_active ? 'secondary' : 'outline'}>
                       {customer.is_active ? 'Active' : 'Inactive'}
                     </Badge>
@@ -187,8 +187,9 @@ export default function Customers() {
                           setShowCustomerModal(true);
                         }}
                       >
-                        <Edit size={14} className="mr-1" />
-                        Edit
+                        <Edit size={14} className="mr-1 hidden sm:inline" />
+                        <span className="hidden sm:inline">Edit</span>
+                        <Edit size={14} className="sm:hidden" />
                       </Button>
                       <Button 
                         variant="outline" 

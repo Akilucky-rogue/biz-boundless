@@ -182,16 +182,16 @@ const Vendors = () => {
       </div>
 
       {/* Vendors Table */}
-      <div className="border rounded-lg overflow-hidden">
-        <table className="w-full">
+      <div className="border rounded-lg overflow-x-auto">
+        <table className="w-full min-w-[800px]">
           <thead className="bg-muted/50">
             <tr>
               <th className="text-left p-3 font-medium">Name</th>
-              <th className="text-left p-3 font-medium">Contact</th>
+              <th className="text-left p-3 font-medium hidden md:table-cell">Contact</th>
               <th className="text-left p-3 font-medium">Phone</th>
-              <th className="text-left p-3 font-medium">Email</th>
+              <th className="text-left p-3 font-medium hidden lg:table-cell">Email</th>
               <th className="text-left p-3 font-medium">Outstanding</th>
-              <th className="text-left p-3 font-medium">Status</th>
+              <th className="text-left p-3 font-medium hidden sm:table-cell">Status</th>
               <th className="text-right p-3 font-medium">Actions</th>
             </tr>
           </thead>
@@ -204,13 +204,13 @@ const Vendors = () => {
                     <div className="text-xs text-muted-foreground">GST: {vendor.gstin}</div>
                   )}
                 </td>
-                <td className="p-3">{vendor.contact_person || '-'}</td>
+                <td className="p-3 hidden md:table-cell">{vendor.contact_person || '-'}</td>
                 <td className="p-3">{vendor.phone || '-'}</td>
-                <td className="p-3 text-sm">{vendor.email || '-'}</td>
+                <td className="p-3 text-sm hidden lg:table-cell">{vendor.email || '-'}</td>
                 <td className="p-3">
                   <span className="font-medium text-warning">₹0.00</span>
                 </td>
-                <td className="p-3">
+                <td className="p-3 hidden sm:table-cell">
                   <Badge variant={vendor.is_active ? 'secondary' : 'outline'}>
                     {vendor.is_active ? 'Active' : 'Inactive'}
                   </Badge>
@@ -222,8 +222,9 @@ const Vendors = () => {
                       size="sm"
                       onClick={() => handleEditVendor(vendor)}
                     >
-                      <Edit size={14} className="mr-1" />
-                      Edit
+                      <Edit size={14} className="mr-1 hidden sm:inline" />
+                      <span className="hidden sm:inline">Edit</span>
+                      <Edit size={14} className="sm:hidden" />
                     </Button>
                     <Button 
                       variant="outline" 

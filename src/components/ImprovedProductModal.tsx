@@ -106,12 +106,26 @@ export const ImprovedProductModal = ({ open, onClose, product }: ImprovedProduct
         description: formData.description,
         sku: formData.sku,
         barcode: formData.barcode,
+        is_active: true,
       };
 
       if (product) {
         await updateProduct(product.id, productData);
       } else {
-        await addProduct(productData);
+        const { data: newProduct, error: productError } = await addProduct(productData);
+        
+        // If opening stock > 0, create an inventory batch
+        if (!productError && newProduct && formData.opening_stock > 0) {
+          const { supabase } = await import('@/integrations/supabase/client');
+          await supabase.from('inventory_batches').insert({
+            product_id: newProduct.id,
+            quantity: formData.opening_stock,
+            remaining_quantity: formData.opening_stock,
+            purchase_price: formData.purchase_price,
+            purchased_at: new Date().toISOString(),
+            location: 'Initial Stock',
+          });
+        }
       }
 
       onClose();

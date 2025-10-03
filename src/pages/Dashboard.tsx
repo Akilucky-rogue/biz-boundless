@@ -71,15 +71,15 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background pb-20 pt-4">
-      <div className="px-4">
+      <div className="px-4 max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back, manage your store efficiently</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-sm md:text-base text-muted-foreground">Welcome back, manage your store efficiently</p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
           {stats.map((stat, index) => (
             <StatsCard
               key={index}
@@ -100,20 +100,24 @@ export default function Dashboard() {
             <TrendingUp size={20} className="text-success" />
           </div>
           <div className="space-y-3">
-            {recentSales.map((sale) => (
-              <div key={sale.id} className="flex items-center justify-between py-2 border-b border-border/30 last:border-b-0">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                    <ShoppingCart size={16} className="text-primary" />
+            {recentSales.length > 0 ? (
+              recentSales.map((sale) => (
+                <div key={sale.id} className="flex items-center justify-between py-2 border-b border-border/30 last:border-b-0">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <ShoppingCart size={16} className="text-primary" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-medium text-foreground truncate">{sale.customer}</p>
+                      <p className="text-xs text-muted-foreground">{sale.time}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-foreground">{sale.customer}</p>
-                    <p className="text-xs text-muted-foreground">{sale.time}</p>
-                  </div>
+                  <p className="font-semibold text-success ml-2">{sale.amount}</p>
                 </div>
-                <p className="font-semibold text-success">{sale.amount}</p>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-center text-muted-foreground py-4">No sales yet today</p>
+            )}
           </div>
         </div>
 
@@ -122,25 +126,24 @@ export default function Dashboard() {
           <h2 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h2>
           <div className="grid grid-cols-2 gap-3">
             <button 
-              className="p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
+              className="p-3 md:p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
               onClick={() => navigate('/purchase')}
             >
               <Package className="text-primary mb-2" size={20} />
-              <p className="font-medium text-foreground">Add Purchase</p>
-              <p className="text-xs text-muted-foreground">Create purchase order</p>
+              <p className="font-medium text-foreground text-sm md:text-base">Add Purchase</p>
+              <p className="text-xs text-muted-foreground hidden sm:block">Create purchase order</p>
             </button>
             <button 
-              className="p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
+              className="p-3 md:p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
               onClick={() => navigate('/sales')}
             >
               <ShoppingCart className="text-secondary mb-2" size={20} />
-              <p className="font-medium text-foreground">Add Sale</p>
-              <p className="text-xs text-muted-foreground">Create new invoice</p>
+              <p className="font-medium text-foreground text-sm md:text-base">Add Sale</p>
+              <p className="text-xs text-muted-foreground hidden sm:block">Create new invoice</p>
             </button>
             <button 
-              className="p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
+              className="p-3 md:p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
               onClick={() => {
-                // TODO: Implement receive payment functionality
                 toast({
                   title: "Coming Soon",
                   description: "Receive payment functionality will be added soon",
@@ -148,13 +151,12 @@ export default function Dashboard() {
               }}
             >
               <DollarSign className="text-success mb-2" size={20} />
-              <p className="font-medium text-foreground">Receive Payment</p>
-              <p className="text-xs text-muted-foreground">Record customer payments</p>
+              <p className="font-medium text-foreground text-sm md:text-base">Receive Payment</p>
+              <p className="text-xs text-muted-foreground hidden sm:block">Record customer payments</p>
             </button>
             <button 
-              className="p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
+              className="p-3 md:p-4 bg-muted/50 rounded-lg text-left hover:bg-muted transition-colors"
               onClick={() => {
-                // TODO: Implement make payment functionality
                 toast({
                   title: "Coming Soon",
                   description: "Make payment functionality will be added soon",
@@ -162,8 +164,8 @@ export default function Dashboard() {
               }}
             >
               <TrendingUp className="text-warning mb-2" size={20} />
-              <p className="font-medium text-foreground">Make Payment</p>
-              <p className="text-xs text-muted-foreground">Pay vendor bills</p>
+              <p className="font-medium text-foreground text-sm md:text-base">Make Payment</p>
+              <p className="text-xs text-muted-foreground hidden sm:block">Pay vendor bills</p>
             </button>
           </div>
         </div>
