@@ -3,58 +3,103 @@ import { BarChart3, Download, Calendar, TrendingUp, TrendingDown } from "lucide-
 import { Button } from "@/components/ui/button";
 import { StatsCard } from "@/components/StatsCard";
 import { ReportsActions } from "@/components/ReportsActions";
+import { useSales } from "@/hooks/useSales";
+import { useInventory } from "@/hooks/useInventory";
+import { useCustomers } from "@/hooks/useCustomers";
 
 export default function Reports() {
   const [selectedPeriod, setSelectedPeriod] = useState("week");
+  const { invoices, todaysRevenue, todaysInvoices } = useSales();
+  const { stockSummary } = useInventory();
+  const { customers } = useCustomers();
 
-  // Mock report data
+  // Calculate report stats from real data
+  const totalRevenue = invoices.reduce((sum, inv) => sum + inv.total_amount, 0);
+  const lowStockCount = stockSummary.filter(item => item.status === 'low_stock').length;
+  const outOfStockCount = stockSummary.filter(item => item.status === 'out_of_stock').length;
+  
+  // Get top selling product
+  const productSales = new Map<string, { name: string; units: number }>();
+  invoices.forEach(inv => {
+    inv.invoice_items?.forEach(item => {
+      const productId = item.product_id;
+      const productName = item.products?.name || "Unknown";
+      const current = productSales.get(productId) || { name: productName, units: 0 };
+      productSales.set(productId, { name: productName, units: current.units + item.quantity });
+    });
+  });
+  
+  const topProduct = Array.from(productSales.values())
+    .sort((a, b) => b.units - a.units)[0] || { name: "N/A", units: 0 };
+
   const reportStats = [
     {
-      title: "Revenue",
-      value: "₹45,230",
-      change: "+15.3% vs last week",
+      title: "Total Revenue",
+      value: `₹${totalRevenue.toLocaleString()}`,
+      change: `${invoices.length} invoices`,
       changeType: "positive" as const,
       icon: TrendingUp,
     },
     {
-      title: "Orders",
-      value: "156",
-      change: "+12 new orders",
+      title: "Total Orders",
+      value: invoices.length.toString(),
+      change: `${todaysInvoices.length} today`,
       changeType: "positive" as const,
       icon: BarChart3,
     },
     {
       title: "Top Product",
-      value: "Rice Basmati",
-      change: "45 units sold",
+      value: topProduct.name,
+      change: `${topProduct.units} units sold`,
       changeType: "neutral" as const,
       icon: TrendingUp,
     },
     {
-      title: "Profit Margin",
-      value: "23.5%",
-      change: "-2.1% vs last week",
-      changeType: "negative" as const,
+      title: "Stock Alerts",
+      value: (lowStockCount + outOfStockCount).toString(),
+      change: `${outOfStockCount} out of stock`,
+      changeType: outOfStockCount > 0 ? "negative" as const : "positive" as const,
       icon: TrendingDown,
     }
   ];
 
-  const salesTrend = [
-    { day: "Mon", sales: 1200 },
-    { day: "Tue", sales: 1800 },
-    { day: "Wed", sales: 1400 },
-    { day: "Thu", sales: 2100 },
-    { day: "Fri", sales: 2800 },
-    { day: "Sat", sales: 3200 },
-    { day: "Sun", sales: 2400 },
-  ];
+  // Get recent sales trend (last 7 days)
+  const last7Days = Array.from({ length: 7 }, (_, i) => {
+    const date = new Date();
+    date.setDate(date.getDate() - (6 - i));
+    return date;
+  });
 
-  const topProducts = [
-    { name: "Rice Basmati 1kg", units: 45, revenue: 3825 },
-    { name: "Cooking Oil 1L", units: 32, revenue: 3840 },
-    { name: "Sugar 1kg", units: 28, revenue: 1260 },
-    { name: "Wheat Flour 1kg", units: 25, revenue: 875 },
-  ];
+  const salesTrend = last7Days.map(date => {
+    const dayInvoices = invoices.filter(inv => {
+      const invDate = new Date(inv.created_at);
+      return invDate.toDateString() === date.toDateString();
+    });
+    const daySales = dayInvoices.reduce((sum, inv) => sum + inv.total_amount, 0);
+    return {
+      day: date.toLocaleDateString('en-US', { weekday: 'short' }),
+      sales: daySales
+    };
+  });
+
+  // Get top products by revenue
+  const productRevenue = new Map<string, { name: string; units: number; revenue: number }>();
+  invoices.forEach(inv => {
+    inv.invoice_items?.forEach(item => {
+      const productId = item.product_id;
+      const productName = item.products?.name || "Unknown";
+      const current = productRevenue.get(productId) || { name: productName, units: 0, revenue: 0 };
+      productRevenue.set(productId, {
+        name: productName,
+        units: current.units + item.quantity,
+        revenue: current.revenue + item.line_total
+      });
+    });
+  });
+
+  const topProducts = Array.from(productRevenue.values())
+    .sort((a, b) => b.revenue - a.revenue)
+    .slice(0, 4);
 
   const maxSales = Math.max(...salesTrend.map(item => item.sales));
 

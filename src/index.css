@@ -170,10 +170,19 @@
   .scrollbar-hide {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+    overflow: -moz-scrollbars-none;  /* Firefox old */
   }
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;  /* Chrome, Safari and Opera */
+    width: 0;
+    height: 0;
+  }
+  
+  /* Enable smooth touch scrolling */
+  .touch-pan-x {
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Mobile-first FAB component */

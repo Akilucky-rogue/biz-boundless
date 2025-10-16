@@ -38,11 +38,11 @@ export const BottomNavigation = () => {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border/50 shadow-lg safe-bottom z-50">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center py-2 pl-2 pr-2">
+      <div className="w-full">
+        <div className="flex items-center py-2 gap-2">
           {/* Main Navigation Items - Scrollable on mobile */}
-          <div className="flex-1 overflow-x-auto overflow-y-hidden scrollbar-hide">
-            <div className="flex gap-1 px-2 min-w-max">
+          <div className="flex-1 overflow-x-auto overflow-y-hidden scrollbar-hide touch-pan-x" style={{ WebkitOverflowScrolling: 'touch' }}>
+            <div className="flex gap-1 px-2" style={{ minWidth: 'max-content' }}>
               {displayItems.map(({ path, icon: Icon, label }) => {
                 const isActive = location.pathname === path;
                 
@@ -67,7 +67,7 @@ export const BottomNavigation = () => {
           </div>
 
           {/* User Info & Logout - Fixed on right */}
-          <div className="flex items-center gap-2 border-l border-border/50 pl-2 ml-2 flex-shrink-0">
+          <div className="flex items-center gap-2 border-l border-border/50 pl-2 pr-2 flex-shrink-0">
             {profile && (
               <div className="text-right hidden lg:block">
                 <div className="text-sm font-medium text-foreground">{profile.full_name}</div>
