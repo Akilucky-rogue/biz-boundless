@@ -129,9 +129,9 @@ export const PurchaseModal = ({ open, onClose }: PurchaseModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto w-[95vw] sm:w-full p-4 sm:p-6">
         <DialogHeader>
-          <DialogTitle>Create New Purchase Order</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">Create New Purchase Order</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -192,7 +192,7 @@ export const PurchaseModal = ({ open, onClose }: PurchaseModalProps) => {
             </div>
 
             {items.map((item, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-3 p-3 bg-muted/30 rounded-lg">
+              <div key={index} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-3 bg-muted/30 rounded-lg">
                 <div className="space-y-2">
                   <Label>Product</Label>
                   <Select value={item.product_id} onValueChange={(value) => updateItem(index, 'product_id', value)}>
@@ -232,13 +232,13 @@ export const PurchaseModal = ({ open, onClose }: PurchaseModalProps) => {
                   />
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 sm:col-span-2 lg:col-span-1">
                   <Label>Total</Label>
                   <div className="flex items-center gap-2">
                     <Input
                       value={`₹${(item.quantity * item.unit_price).toFixed(2)}`}
                       readOnly
-                      className="bg-muted"
+                      className="bg-muted flex-1"
                     />
                     {items.length > 1 && (
                       <Button

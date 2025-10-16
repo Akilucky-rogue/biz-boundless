@@ -113,12 +113,12 @@ export default function Sales() {
               className="pl-10"
             />
           </div>
-          <Button variant="outline" size="icon">
+          <Button variant="outline" size="icon" className="shrink-0">
             <Filter size={18} />
           </Button>
-          <Button className="bg-gradient-primary hover:opacity-90" variant="gradient" onClick={() => setShowInvoiceModal(true)}>
-            <Plus size={18} className="mr-2" />
-            New Invoice
+          <Button className="bg-gradient-primary hover:opacity-90 shrink-0" variant="gradient" onClick={() => setShowInvoiceModal(true)}>
+            <Plus size={18} className="sm:mr-2" />
+            <span className="hidden sm:inline">New Invoice</span>
           </Button>
         </div>
 
@@ -151,24 +151,24 @@ export default function Sales() {
                 </span>
               </div>
               
-              <div className="grid grid-cols-3 gap-4 text-sm">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 text-sm">
                 <div>
-                  <p className="text-muted-foreground">Amount</p>
-                  <p className="font-semibold text-success text-lg">₹{sale.amount}</p>
+                  <p className="text-muted-foreground text-xs sm:text-sm">Amount</p>
+                  <p className="font-semibold text-success text-base sm:text-lg">₹{sale.amount}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Items</p>
-                  <p className="font-semibold text-foreground">{sale.items} products</p>
+                  <p className="text-muted-foreground text-xs sm:text-sm">Items</p>
+                  <p className="font-semibold text-foreground text-sm sm:text-base">{sale.items} products</p>
                 </div>
-                <div>
-                  <p className="text-muted-foreground">Payment</p>
-                  <p className="font-semibold text-foreground">
+                <div className="col-span-2 sm:col-span-1">
+                  <p className="text-muted-foreground text-xs sm:text-sm">Payment</p>
+                  <p className="font-semibold text-foreground text-sm sm:text-base">
                     {getPaymentMethodIcon(sale.paymentMethod)} {sale.paymentMethod.toUpperCase()}
                   </p>
                 </div>
               </div>
 
-              <div className="flex gap-2 mt-3 pt-3 border-t border-border/30">
+              <div className="flex flex-col sm:flex-row gap-2 mt-3 pt-3 border-t border-border/30">
                 <Button variant="outline" size="sm" className="flex-1" onClick={() => {
                   setSelectedInvoiceId(sale.id);
                   setShowDetailsModal(true);

@@ -56,12 +56,12 @@ export default function Purchase() {
               className="pl-10"
             />
           </div>
-          <Button variant="outline" size="icon">
+          <Button variant="outline" size="icon" className="shrink-0">
             <Filter size={18} />
           </Button>
-          <Button variant="gradient" onClick={() => setShowPurchaseModal(true)}>
-            <Plus size={18} className="mr-2" />
-            New Purchase
+          <Button variant="gradient" onClick={() => setShowPurchaseModal(true)} className="shrink-0">
+            <Plus size={18} className="sm:mr-2" />
+            <span className="hidden sm:inline">New Purchase</span>
           </Button>
         </div>
 

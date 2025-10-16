@@ -51,14 +51,14 @@ export default function Inventory() {
     <div className="min-h-screen bg-background pb-20 pt-4">
       <div className="px-4">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Inventory</h1>
-            <p className="text-muted-foreground">Manage your product catalog and stock levels</p>
+        <div className="flex justify-between items-start sm:items-center mb-6 gap-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground">Inventory</h1>
+            <p className="text-sm text-muted-foreground hidden sm:block">Manage your product catalog and stock levels</p>
           </div>
-          <Button variant="gradient" onClick={() => setShowProductModal(true)}>
-            <Plus size={16} className="mr-2" />
-            Add Product
+          <Button variant="gradient" onClick={() => setShowProductModal(true)} className="shrink-0">
+            <Plus size={16} className="sm:mr-2" />
+            <span className="hidden sm:inline">Add Product</span>
           </Button>
         </div>
 
@@ -119,10 +119,10 @@ export default function Inventory() {
                 </span>
               </div>
               
-              <div className="grid grid-cols-3 gap-4 text-sm">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 text-sm">
                 <div>
-                  <p className="text-muted-foreground">Stock</p>
-                  <p className={`font-semibold ${getStatusColor(item.status)}`}>
+                  <p className="text-muted-foreground text-xs sm:text-sm">Stock</p>
+                  <p className={`font-semibold text-sm sm:text-base ${getStatusColor(item.status)}`}>
                     {item.stock} {item.unit}
                     {item.stock <= item.lowStockAlert && item.stock > 0 && (
                       <AlertTriangle size={14} className="inline ml-1 text-warning" />
@@ -130,12 +130,12 @@ export default function Inventory() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Price</p>
-                  <p className="font-semibold text-foreground">₹{item.price}</p>
+                  <p className="text-muted-foreground text-xs sm:text-sm">Price</p>
+                  <p className="font-semibold text-foreground text-sm sm:text-base">₹{item.price}</p>
                 </div>
-                <div>
-                  <p className="text-muted-foreground">Alert At</p>
-                  <p className="font-semibold text-foreground">{item.lowStockAlert} {item.unit}</p>
+                <div className="col-span-2 sm:col-span-1">
+                  <p className="text-muted-foreground text-xs sm:text-sm">Alert At</p>
+                  <p className="font-semibold text-foreground text-sm sm:text-base">{item.lowStockAlert} {item.unit}</p>
                 </div>
               </div>
             </div>

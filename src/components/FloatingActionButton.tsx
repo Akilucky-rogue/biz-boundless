@@ -40,10 +40,10 @@ export const FloatingActionButton = () => {
   };
 
   return (
-    <div className="fab-container">
+    <div className="fab-container mb-16 sm:mb-0">
       {/* Quick action buttons */}
       {isOpen && (
-        <div className="absolute bottom-16 right-0 flex flex-col gap-3 animate-slide-up">
+        <div className="absolute bottom-16 right-0 flex flex-col gap-3 animate-slide-up mb-2">
           {quickActions.map(({ icon: Icon, label, action }) => (
             <Button
               key={label}
